@@ -9,4 +9,4 @@ res=requests.get(url,headers=header)
 print('响应头:'+str(res.headers))
 # print('响应状态码:'+res.status_code)
 # print('响应正文:'+res.text)  #xml  html  json
-print('请求头:'+str(res.request.headers))
+print('请求头:'+str(res.request.headers['User-Agent']))
