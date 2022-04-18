@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <div>
+            <div>
+                <div class="left">用户名</div>
+                <input type="text" v-model="name" placeholder="请输入用户名">
+            </div>
+            <div>
+                <div class="left">密码</div>
+                <input type="password" v-model="password" placeholder="请输入密码">
+            </div>
+            <!-- 现在来加一个提交的按钮   上面绑定个点击事件 -->
+            <div class="err-msg">
+                {{msg}}
+            </div>
+            <button type="button" @click="submit">登录</button>
+        </div>
+    </div>
+
+    <!-- 这里引入的Vue库的文件  所以可以使用Vue语法来写HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- 这里引入了axios库 所以可以使用axios 来发送请求 -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+    <script>
+        Vue.config.devtools = true;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: '登录!',
+                name: "",
+                password: "",
+                msg: ""
+            },
+            methods: {
+
+                submit() {
+                    // console.log('登录成功了');
+                    // 使用这个axios 库 可以用来请求接口，和传参数，和postman请求没有区别。
+
+
+                    axios({
+                        url: 'http://127.0.0.1:8888/api/login', // 你定义的什么接口 你这里就要写对应的请求地址 ok?en 
+                        data: {
+                            name: this.name,  // 这种写法 就可以直接拿到 input 输入的数据了， 可以通过 F12 中的Vue  看到。
+                            password: this.password
+                        },
+                        method: 'post'
+                    }).then(({ data }) => {
+                        // 这个回调函数 ，就是后端数据发过来的时候会执行。 data 就是后端发送过来的数据。
+                        
+                        this.msg = data.msg;
+                    
+                        console.log('这是后端返回来的数据', data);
+
+                    })
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
