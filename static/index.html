@@ -9,20 +9,89 @@
 </head>
 
 <body>
-    <div id="app">ddd2</div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <!-- 可以在这个页面做你想要的东西. -->
+    <!-- 这里面用的是普通的HTML 语法 -->
+    <!-- <div id="app">
+        用户名：<input type="text" placeholder="请输入用户名" id="name">
+        <br><br>
+        密码：&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" placeholder="请输入密码" id="pwd">
+        <br><br>
+        <button id="re" onclick="alert('注册成功')">注册哈哈</button>
+    </div> -->
+    <!-- 这里是Vue语法 可以按照文档学习一些简单的 编写。 你现在可以在这里随心所欲的 写 前端页面了。  -->
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <div>
+            <div>
+                <div class="left">用户名</div>
+                <input type="text" v-model="name" placeholder="请输入用户名">
+            </div>
+            <div>
+                <div class="left">手机号</div>
+                <input type="text" v-model="phone" placeholder="请输入手机号">
+            </div>
+            <div>
+                <div class="left">密码</div>
+                <input type="password" v-model="password" placeholder="请输入密码">
+            </div>
+            <div>
+                <div class="left">确认密码</div>
+                <input type="password" v-model="cpassword" placeholder="请输入确认密码">
+            </div>
+
+            <!-- 现在来加一个提交的按钮   上面绑定个点击事件 -->
+            <button type="button" @click="submit">注册</button>
+
+            <div class="err-msg">
+                {{msg}}
+            </div>
+        </div>
+    </div>
+
+    <!-- 这里引入的Vue库的文件  所以可以使用Vue语法来写HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!-- 这里引入了axios库 所以可以使用axios 来发送请求 -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
     <script>
-        var vm = new Vue({
-            el: '#app'
+        Vue.config.devtools = true;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello danBaby!',
+                name: "",
+                phone: "",
+                password: "",
+                cpassword:"",
+                msg:""
+            },
+            methods: {
+                submit() {
+                    console.log('点击提交了');
+
+                    // 使用这个axios 库 可以用来请求接口，和传参数，和postman请求没有区别。
+                    axios({
+                        url: 'http://127.0.0.1:8888/api/register',
+                        data: {
+                            name: this.name,  // 这种写法 就可以直接拿到 input 输入的数据了， 可以通过 F12 中的Vue  看到。
+                            phone: this.phone,
+                            password: this.password,
+                            cpassword: this.cpassword
+                        },
+                        method: 'post'
+                    }).then(({ data }) => {
+                        // 这个回调函数 ，就是后端数据发过来的时候会执行。 data 就是后端发送过来的数据。
+                        
+                        this.msg = data.msg;
+
+                        // 后端告诉我 注册成功了，我就让它跳转到登录页面。
+                        window.location.href="http://127.0.0.1:8888/login"
+                    })
+
+                }
+            }
         })
-        axios.post('http://127.0.0.1:8888/register?dd=111&33=44', {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
-        })
-            .then(function (response) {
-                console.log(response);
-            })
     </script>
 </body>
 
